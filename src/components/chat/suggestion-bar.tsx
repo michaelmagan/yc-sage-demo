@@ -45,6 +45,7 @@ export function SuggestionBar() {
     setIsLoading(true)
     setRandomSuggestions(getRandomSuggestions())
     setIsLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSuggestionClick = (suggestion: string) => {
