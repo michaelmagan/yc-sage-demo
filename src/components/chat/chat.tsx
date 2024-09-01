@@ -99,7 +99,7 @@ export function Chat({ messages, isLoading }: ChatProps) {
             {...getAnimationProps(messages.length)}
             className="flex items-start justify-start gap-3"
           >
-            <div className="w-3/4">
+            <div className="w-fit">
               <motion.div
                 initial={{ scale: shouldReduceMotion ? 1 : 0.9 }}
                 animate={{ scale: 1 }}
