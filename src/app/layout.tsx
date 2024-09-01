@@ -1,86 +1,45 @@
-import "@/styles/globals.css"
-
-import type { Metadata, Viewport } from "next"
+import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 
-import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
+import { Toaster } from "@/components/ui/sonner"
+import { Header } from "@/components/Header"
 import { ThemeProvider } from "@/components/theme-provider"
+
+import "@/styles/globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
-interface RootLayoutProps {
-  children: React.ReactNode
-}
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url.base),
-  title: {
-    default: siteConfig.name,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  keywords: siteConfig.keywords,
-  authors: [
-    {
-      name: siteConfig.author,
-      url: siteConfig.url.author,
-    },
-  ],
-  creator: siteConfig.author,
+  title: "YC Archive Explorer - AI-Powered YC Startup Insights",
+  description:
+    "Explore Y Combinator's history with our AI-driven interface, accessing data on all past YC founders and startups.",
   openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: siteConfig.url.base,
-    title: siteConfig.name,
-    description: siteConfig.description,
-    siteName: siteConfig.name,
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.name,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.name,
-    description: siteConfig.description,
-    images: [siteConfig.ogImage],
-    creator: "@_rdev7",
-  },
-  icons: {
-    icon: "/favicon.ico",
+    title: "YC Archive Explorer - AI-Powered YC Startup Insights",
+    description:
+      "Dive into Y Combinator's rich history using our generative UI. Discover insights on all past YC founders and startups through an intelligent, interactive experience.",
   },
 }
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
-}
-
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="h-full">
       <head />
-      <body
-        className={cn(
-          "min-h-screen bg-background antialiased",
-          inter.className
-        )}
-      >
+      <body className={cn("h-full bg-background font-sans antialiased")}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <Header />
+          <main className="flex-1 overflow-hidden">{children}</main>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   )
