@@ -20,7 +20,7 @@ const getYCDataTool = {
         name: "query",
         type: "string",
         description:
-          "The search query for YC data. Make the query a detailed string.",
+          "The search query for YC data. It is crucial that the query is extremely detailed and comprehensive, including every aspect the user has asked for. The query MUST be a long, elaborate string containing at least 20-30 words to ensure all user requirements are captured. Shorter queries will not provide sufficient context for accurate results.",
         isRequired: true,
       },
     ],
@@ -31,7 +31,7 @@ export const registerHydraComponents = async (hydra: HydraClient) => {
   await Promise.all([
     hydra.registerComponent(
       "HydraCarousel",
-      "A carousel of cards component for displaying multiple cards in a carousel format. Make sure to inlcude links as buttons.",
+      "A carousel of cards component for displaying multiple cards in a carousel format. Each card should include as many relevant links as possible, represented as buttons. These links should be derived from the content and context of each card, providing comprehensive navigation options for users. Ensure that every potential action or related information has a corresponding button link.",
       HydraCarousel,
       {
         HydraCarousel: zodToJsonSchema(HydraCarouselSchema),

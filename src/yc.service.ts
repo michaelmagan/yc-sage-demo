@@ -29,7 +29,7 @@ const getOpenAIClient = (): OpenAI => {
 
 export async function queryPineconeForDocuments(
   query: string,
-  topK: number = 10
+  topK: number = 5
 ): Promise<Document[]> {
   "use server"
   const client = getPineconeClient()

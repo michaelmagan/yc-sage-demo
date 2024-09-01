@@ -20,7 +20,9 @@ export const HydraButton: React.FC<HydraButtonType> = ({
       asChild
       {...props}
     >
-      <Link href={href}>{text}</Link>
+      <Link href={href} target="_blank" rel="noopener noreferrer">
+        {text}
+      </Link>
     </Button>
   )
 }

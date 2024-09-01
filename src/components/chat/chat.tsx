@@ -49,7 +49,7 @@ export function Chat({ messages, isLoading }: ChatProps) {
   }, [messages, isLoading])
 
   return (
-    <div className="max-w-8xl mx-auto flex h-full w-full flex-1 flex-col overflow-hidden">
+    <div className="mx-auto flex h-full w-full flex-1 flex-col overflow-hidden">
       <div
         ref={chatContainerRef}
         className="flex-1 space-y-4 overflow-y-auto scroll-smooth p-4"
@@ -59,46 +59,52 @@ export function Chat({ messages, isLoading }: ChatProps) {
             key={index}
             ref={index === messages.length - 1 ? lastMessageRef : null}
             {...getAnimationProps(index)}
-            className={`flex items-start gap-3 ${
-              message.sender === "user" ? "justify-end" : ""
-            }`}
+            className="w-full"
           >
-            <div className="grid max-w-full gap-1">
-              <motion.div
-                initial={{ scale: shouldReduceMotion ? 1 : 0.9 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.3 }}
-                className={
-                  message.sender === "user"
-                    ? "inline-block max-w-md rounded-lg bg-primary px-4 py-3 text-primary-foreground"
-                    : "inline-block max-w-md rounded-lg bg-muted px-4 py-3"
-                }
+            <div
+              className={`flex items-start gap-3 ${
+                message.sender === "user" ? "justify-end" : "justify-start"
+              }`}
+            >
+              <div
+                className={`${message.sender === "user" ? "ml-auto w-3/4" : "w-3/4"}`}
               >
-                {message.message.split("\n").map((line, i, arr) => (
-                  <React.Fragment key={i}>
-                    {line}
-                    {i < arr.length - 1 && <br />}
-                  </React.Fragment>
-                ))}
-              </motion.div>
-              {message.component && (
-                <div className="mt-2 w-full">{message.component}</div>
-              )}
+                <motion.div
+                  initial={{ scale: shouldReduceMotion ? 1 : 0.9 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className={
+                    message.sender === "user"
+                      ? "float-right inline-block rounded-lg bg-primary px-4 py-3 text-primary-foreground"
+                      : "inline-block rounded-lg bg-muted px-4 py-3"
+                  }
+                >
+                  {message.message.split("\n").map((line, i, arr) => (
+                    <React.Fragment key={i}>
+                      {line}
+                      {i < arr.length - 1 && <br />}
+                    </React.Fragment>
+                  ))}
+                </motion.div>
+              </div>
             </div>
+            {message.component && (
+              <div className="mt-2 w-full">{message.component}</div>
+            )}
           </motion.div>
         ))}
         {isLoading && (
           <motion.div
             ref={lastMessageRef}
             {...getAnimationProps(messages.length)}
-            className="flex items-start gap-3"
+            className="flex items-start justify-start gap-3"
           >
-            <div className="grid max-w-full gap-1">
+            <div className="w-3/4">
               <motion.div
                 initial={{ scale: shouldReduceMotion ? 1 : 0.9 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.3 }}
-                className="flex min-h-[40px] max-w-md items-center justify-center rounded-lg bg-muted px-4 py-3"
+                className="flex min-h-[40px] items-center justify-center rounded-lg bg-muted px-4 py-3"
               >
                 <Dots />
               </motion.div>
