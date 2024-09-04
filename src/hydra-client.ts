@@ -1,27 +1,45 @@
-import { HydraCarouselSchema } from "@/model/hydra"
-import { queryPineconeForDocuments } from "@/yc.service"
+import { generateFakeChartData } from "@/data.service"
+import { ChartDataSchema } from "@/model/hydra"
 import { HydraClient } from "hydra-ai"
 import { zodToJsonSchema } from "zod-to-json-schema"
 
-import { HydraCarousel } from "@/components/hydra/carousel"
+import Chart from "@/components/hydra/chart"
 
 export const getHydraClient = (): HydraClient => {
   const hydra = new HydraClient()
   return hydra
 }
 
-const getYCDataTool = {
-  getComponentContext: queryPineconeForDocuments,
+const getFakeDataTool = {
+  getComponentContext: (
+    numPoints: number,
+    dataKeys: string[],
+    groupBy: "month" | "week" | "day"
+  ) => generateFakeChartData(numPoints, dataKeys, groupBy),
   definition: {
-    name: "getYCData",
-    description: "Get relevant YC data based on the given query.",
+    name: "getFakeData",
+    description: "Generate fake time series data based on the given query.",
     parameters: [
       {
-        name: "query",
+        name: "numPoints",
+        type: "number",
+        description: "The number of data points to generate.",
+        isRequired: true,
+      },
+      {
+        name: "dataKeys",
+        type: "array",
+        description:
+          "The keys for the data points (e.g., 'desktop', 'mobile').",
+        isRequired: true,
+      },
+      {
+        name: "groupBy",
         type: "string",
         description:
-          "The search query for YC data. Make the query a detailed string.",
+          "The time grouping for the data (e.g., 'month', 'week', 'day').",
         isRequired: true,
+        enum: ["month", "week", "day"],
       },
     ],
   },
@@ -30,13 +48,13 @@ const getYCDataTool = {
 export const registerHydraComponents = async (hydra: HydraClient) => {
   await Promise.all([
     hydra.registerComponent(
-      "HydraCarousel",
-      "A carousel of cards component for displaying multiple cards in a carousel format. Make sure to inlcude links as buttons.",
-      HydraCarousel,
+      "Chart",
+      "A component for displaying any kind of data.",
+      Chart,
       {
-        HydraCarousel: zodToJsonSchema(HydraCarouselSchema),
+        Chart: zodToJsonSchema(ChartDataSchema),
       },
-      [getYCDataTool]
+      [getFakeDataTool]
     ),
   ])
 }

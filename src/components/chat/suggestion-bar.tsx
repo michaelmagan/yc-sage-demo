@@ -15,24 +15,17 @@ export function SuggestionBar() {
   // Suggestions for getting YC companies based on semantic data
   const allSuggestions: Suggestion[] = [
     {
-      title: "Find AI startups",
-      query: "Show me YC companies working on artificial intelligence.",
+      title: "Monthly signups",
+      query:
+        "How many users signed up in the six month broken down by mobile and desktop?",
     },
     {
-      title: "Discover fintech",
-      query: "List YC startups in the financial technology sector.",
+      title: "Monthly impressions",
+      query: "How many impressions did we get last 12 months",
     },
     {
-      title: "Explore healthcare",
-      query: "What YC companies are innovating in healthcare?",
-    },
-    {
-      title: "Recent YC batches",
-      query: "Show me startups from the most recent YC batch.",
-    },
-    {
-      title: "Successful exits",
-      query: "Which YC companies have had successful exits or IPOs?",
+      title: "Monthly subscriptions",
+      query: "How many subscriptions did we get last 3 months?",
     },
   ]
 
