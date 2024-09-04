@@ -1,9 +1,10 @@
-import { HydraCarouselSchema } from "@/model/hydra"
+import { HydraCarouselSchema, HydraTextSchema } from "@/model/hydra"
 import { queryPineconeForDocuments } from "@/yc.service"
 import { HydraClient } from "hydra-ai"
 import { zodToJsonSchema } from "zod-to-json-schema"
 
 import { HydraCarousel } from "@/components/hydra/carousel"
+import { HydraText } from "@/components/hydra/text"
 
 export const getHydraClient = (): HydraClient => {
   const hydra = new HydraClient()
@@ -37,6 +38,14 @@ export const registerHydraComponents = async (hydra: HydraClient) => {
         HydraCarousel: zodToJsonSchema(HydraCarouselSchema),
       },
       [getYCDataTool]
+    ),
+    hydra.registerComponent(
+      "HydraText",
+      "A text component for creating and generating text content. Generate text based on the context and the user's query. Each field should have a unique 'id' that corresponds to the data it represents. The 'share' property allows defining multiple sharing options, each with a custom URL template. In the URL template, use {fieldId} placeholders to insert field values when sharing.",
+      HydraText,
+      {
+        HydraText: zodToJsonSchema(HydraTextSchema),
+      }
     ),
   ])
 }
