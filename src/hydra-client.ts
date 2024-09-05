@@ -51,9 +51,7 @@ export const registerHydraComponents = async (hydra: HydraClient) => {
       "Chart",
       "A component for displaying any kind of data.",
       Chart,
-      {
-        Chart: zodToJsonSchema(ChartDataSchema),
-      },
+      JSON.stringify(zodToJsonSchema(ChartDataSchema)),
       [getFakeDataTool]
     ),
   ])

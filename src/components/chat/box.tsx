@@ -59,33 +59,18 @@ export default function ChatBox() {
 
   const fetchResponse = async (message: string) => {
     setIsLoading(true)
+
     try {
       const response = await hydra.generateComponent(message)
-      console.log("Hydra client result:", response) // Added console log
-      if (
-        typeof response === "object" &&
-        response.component &&
-        response.message
-      ) {
-        addMessage({
-          sender: "bot",
-          message: response.message,
-          component: response.component,
-        })
-      } else if (typeof response === "string") {
-        addMessage({
-          sender: "bot",
-          message: response,
-        })
-      } else {
-        console.error("Unexpected response type:", response)
-        addMessage({
-          sender: "bot",
-          message: "Sorry, I received an unexpected response type.",
-        })
-      }
+
+      addMessage({
+        sender: "bot",
+        message: response.message,
+        component: response.component,
+      })
     } catch (error) {
       console.error("Error fetching response:", error)
+
       addMessage({
         sender: "bot",
         message: "Sorry, I encountered an error while processing your request.",
