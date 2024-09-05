@@ -4,7 +4,7 @@ export async function generateFakeChartData(
   numPoints: number = 5,
   dataKeys: string[] = ["desktop", "mobile"],
   groupBy: "month" | "week" | "day" = "month"
-): Promise<ChartData> {
+): Promise<Omit<ChartData, "header" | "subheader">> {
   const data: Array<{ label: string } & Record<string, number>> = []
 
   const startDate = new Date()
@@ -47,17 +47,31 @@ export async function generateFakeChartData(
     data.push(dataPoint)
   }
 
+  const colors = [
+    "#2563eb", // blue
+    "#4ade80", // green
+    "#fbbf24", // yellow
+    "#ef4444", // red
+    "#e11d48", // pink
+    "#ec4899", // purple
+    "#f59e0b", // orange
+    "#10b981", // emerald
+    "#06b6d4", // sky
+    "#3b82f6", // indigo
+    "#84cc16", // lime
+    "#f97316", // amber
+    "#eab308", // yellow
+  ]
+
   const config: Record<string, { label: string; color: string }> = {}
-  dataKeys.forEach((key) => {
+  dataKeys.forEach((key, index) => {
     config[key] = {
       label: key.charAt(0).toUpperCase() + key.slice(1),
-      color: `var(--color-${key})`,
+      color: colors[index % colors.length],
     }
   })
 
   return {
-    header: "Fake Data",
-    subheader: "This is a fake data",
     data,
     config,
   }

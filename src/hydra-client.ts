@@ -17,8 +17,8 @@ const getFakeDataTool = {
     groupBy: "month" | "week" | "day"
   ) => generateFakeChartData(numPoints, dataKeys, groupBy),
   definition: {
-    name: "getFakeData",
-    description: "Generate fake time series data based on the given query.",
+    name: "getData",
+    description: "Return a chart data.",
     parameters: [
       {
         name: "numPoints",
@@ -52,7 +52,7 @@ export const registerHydraComponents = async (hydra: HydraClient) => {
   await Promise.all([
     hydra.registerComponent(
       "Chart",
-      "A component for displaying any kind of data.",
+      "A component for displaying all kinds of data including but not limited to: impressions, subscriptions, and signups. If no data is returned it will display a dummy chart.",
       Chart,
       JSON.stringify(zodToJsonSchema(ChartDataSchema)),
       [getFakeDataTool]

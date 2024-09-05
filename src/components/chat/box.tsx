@@ -63,6 +63,8 @@ export default function ChatBox() {
     try {
       const response = await hydra.generateComponent(message)
 
+      console.log(response)
+
       addMessage({
         sender: "bot",
         message: response.message,

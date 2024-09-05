@@ -24,6 +24,7 @@ type ChartProps = ChartData
 const Chart: React.FC<ChartProps> = ({ header, subheader, data, config }) => {
   const dataKeys = Object.keys(config)
 
+  console.log(dataKeys)
   return (
     <Card className="min-h-[200px] w-full min-w-[300px]">
       <CardHeader>
