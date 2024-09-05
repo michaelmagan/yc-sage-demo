@@ -32,6 +32,9 @@ const getFakeDataTool = {
         description:
           "The keys for the data points (e.g., 'desktop', 'mobile').",
         isRequired: true,
+        items: {
+          type: "string",
+        },
       },
       {
         name: "groupBy",
