@@ -2,9 +2,13 @@
   <img src="https://github.com/michaelmagan/hydraai/raw/main/github-hydra-ai.png" alt="Hydra AI Logo">
 </p>
 
-# hydra-ai RAG Demo On Top of YC Startups
+# Hydra-AI RAG Demo On Top of YC Startups
 
-This template utilizes Hydra AI, a powerful tool for generating React components on-the-fly at runtime using AI. You can register your components and let Hydra intelligently decide when to display them in your application. For more information, visit the [Hydra AI GitHub repository](https://github.com/michaelmagan/hydraai/tree/main).
+This template utilizes Hydra AI, a powerful tool for generating React components on-the-fly at runtime using AI. You can register your components and let Hydra intelligently decide when to display them in your application.
+
+## Powered by Hydra-AI
+
+For more information, visit the [Hydra AI GitHub repository](https://github.com/michaelmagan/hydraai/tree/main).
 
 <p align="center">
   <a href="https://www.npmjs.com/package/hydra-ai"><img src="https://img.shields.io/npm/v/hydra-ai.svg" alt="npm version"></a>
