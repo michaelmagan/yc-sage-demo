@@ -1,9 +1,14 @@
-import { HydraCarouselSchema, HydraTextSchema } from "@/model/hydra"
+import {
+  HydraCarouselSchema,
+  HydraFormSchema,
+  HydraTextSchema,
+} from "@/model/hydra"
 import { queryPineconeForDocuments } from "@/yc.service"
 import { HydraClient } from "hydra-ai"
 import { zodToJsonSchema } from "zod-to-json-schema"
 
 import { HydraCarousel } from "@/components/hydra/carousel"
+import { HydraQueryConstructor } from "@/components/hydra/query-constructor"
 import { HydraText } from "@/components/hydra/text"
 
 export const getHydraClient = (): HydraClient => {
@@ -31,6 +36,7 @@ const getYCDataTool = {
 export const registerHydraComponents = async (hydra: HydraClient) => {
   await Promise.all([
     hydra.registerComponent(
+      /*
       "HydraCarousel",
       "A carousel of cards component for displaying multiple cards in a carousel format. Each card should include as many relevant links as possible, represented as buttons. These links should be derived from the content and context of each card, providing comprehensive navigation options for users. Ensure that every potential action or related information has a corresponding button link.",
       HydraCarousel,
@@ -45,6 +51,14 @@ export const registerHydraComponents = async (hydra: HydraClient) => {
       HydraText,
       {
         HydraText: zodToJsonSchema(HydraTextSchema),
+      }
+    ),
+    */
+      "HydraQueryConstructor",
+      "Creating a query for scientific papers based on the user's query.",
+      HydraQueryConstructor,
+      {
+        HydraQueryConstructor: zodToJsonSchema(HydraFormSchema),
       }
     ),
   ])

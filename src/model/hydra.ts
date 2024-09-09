@@ -70,8 +70,68 @@ export const HydraTextSchema = z.object({
   share: z.array(HydraShareSchema).optional(),
 })
 
+export const HydraInputSchema = z.object({
+  type: z.literal("input"),
+  id: z.string(),
+  label: z.string(),
+  text: z.string(),
+  inputType: z.enum(["text", "password", "email", "number"]),
+  className: z.string().optional(),
+})
+
+export const HydraRadioGroupSchema = z.object({
+  type: z.literal("radio-group"),
+  id: z.string(),
+  label: z.string(),
+  options: z.array(
+    z.object({
+      value: z.string(),
+      label: z.string(),
+    })
+  ),
+  className: z.string().optional(),
+})
+
+export const HydraSelectSchema = z.object({
+  type: z.literal("select"),
+  id: z.string(),
+  label: z.string(),
+  options: z.array(
+    z.object({
+      value: z.string(),
+      label: z.string(),
+    })
+  ),
+  className: z.string().optional(),
+})
+
+export const HydraSliderSchema = z.object({
+  type: z.literal("slider"),
+  id: z.string(),
+  label: z.string(),
+  min: z.number().optional(),
+  max: z.number().optional(),
+  step: z.number().optional(),
+  className: z.string().optional(),
+})
+
+export const HydraFormSchema = z.object({
+  title: z.string().optional(),
+  fields: z.array(
+    z.union([
+      HydraInputSchema,
+      HydraTextareaSchema,
+      HydraRadioGroupSchema,
+      HydraSelectSchema,
+      HydraSliderSchema,
+    ])
+  ),
+  className: z.string().optional(),
+})
+
 export type HydraTextInput = z.infer<typeof HydraTextInputSchema>
 export type HydraTextarea = z.infer<typeof HydraTextareaSchema>
+export type HydraForm = z.infer<typeof HydraFormSchema>
 export type HydraTextSchemaProps = z.infer<typeof HydraTextSchema>
 export type HydraCard = z.infer<typeof HydraCardSchema>
 export type HydraButton = z.infer<typeof HydraButtonSchema>
