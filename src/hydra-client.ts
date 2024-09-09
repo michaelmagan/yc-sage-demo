@@ -1,48 +1,39 @@
-import { generateFakeChartData } from "@/data.service"
-import { ChartDataSchema } from "@/model/hydra"
+import { generateFakePhoneValidationData } from "@/data.service"
+import { PhoneDataPropsSchema } from "@/model/hydra"
 import { HydraClient } from "hydra-ai"
 import { zodToJsonSchema } from "zod-to-json-schema"
 
-import Chart from "@/components/hydra/chart"
+import { PhoneDataUploader } from "@/components/hydra/phoneDataUploader"
+import PhoneData from "@/components/hydra/showPhoneData"
 
 export const getHydraClient = (): HydraClient => {
   const hydra = new HydraClient()
   return hydra
 }
 
-const getFakeDataTool = {
-  getComponentContext: (
-    numPoints: number,
-    dataKeys: string[],
-    groupBy: "month" | "week" | "day"
-  ) => generateFakeChartData(numPoints, dataKeys, groupBy),
+const getPhoneValidationTool = {
+  getComponentContext: async (
+    phoneNumber: string,
+    countryHint: string = "US"
+  ) => {
+    const data = await generateFakePhoneValidationData(phoneNumber, countryHint)
+    return data
+  },
   definition: {
-    name: "getData",
-    description: "Return a chart data.",
+    name: "getPhoneValidationData",
+    description: "Return a phone validation data.",
     parameters: [
       {
-        name: "numPoints",
-        type: "number",
-        description: "The number of data points to generate.",
-        isRequired: true,
-      },
-      {
-        name: "dataKeys",
-        type: "array",
-        description:
-          "The keys for the data points (e.g., 'desktop', 'mobile').",
-        isRequired: true,
-        items: {
-          type: "string",
-        },
-      },
-      {
-        name: "groupBy",
+        name: "phoneNumber",
         type: "string",
-        description:
-          "The time grouping for the data (e.g., 'month', 'week', 'day').",
+        description: "The phone number to validate.",
         isRequired: true,
-        enum: ["month", "week", "day"],
+      },
+      {
+        name: "countryHint",
+        type: "string",
+        description: "The country code hint for validation.",
+        isRequired: false,
       },
     ],
   },
@@ -51,11 +42,18 @@ const getFakeDataTool = {
 export const registerHydraComponents = async (hydra: HydraClient) => {
   await Promise.all([
     hydra.registerComponent(
-      "Chart",
-      "A component for displaying all kinds of data including but not limited to: impressions, subscriptions, and signups. If no data is returned it will display a dummy chart.",
-      Chart,
-      JSON.stringify(zodToJsonSchema(ChartDataSchema)),
-      [getFakeDataTool]
+      "PhoneData",
+      "A component for displaying phone validation data.",
+      PhoneData,
+      JSON.stringify(zodToJsonSchema(PhoneDataPropsSchema)),
+      [getPhoneValidationTool]
+    ),
+    hydra.registerComponent(
+      "VerifyPhoneNumbers",
+      "A component for verifying phone numbers.",
+      PhoneDataUploader,
+      {},
+      []
     ),
   ])
 }

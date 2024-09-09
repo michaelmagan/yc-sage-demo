@@ -11,13 +11,13 @@ import "@/styles/globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "YC Archive Explorer - AI-Powered YC Startup Insights",
+  title: "Trestle - Demo",
   description:
-    "Explore Y Combinator's history with our AI-driven interface, accessing data on all past YC founders and startups.",
+    "Trestle provides identity data APIs to help businesses maximize customer contactability, identification and efficiency.",
   openGraph: {
-    title: "YC Archive Explorer - AI-Powered YC Startup Insights",
+    title: "Trestle - Generative UI Demo",
     description:
-      "Dive into Y Combinator's rich history using our generative UI. Discover insights on all past YC founders and startups through an intelligent, interactive experience.",
+      "Identity data for seamless customer connections. Start a Free Trial to explore our featured products.",
   },
 }
 

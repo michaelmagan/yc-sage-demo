@@ -1,78 +1,46 @@
-import { ChartData } from "@/model/hydra"
+import { PhoneValidationResponse } from "@/model/hydra"
 
-export async function generateFakeChartData(
-  numPoints: number = 5,
-  dataKeys: string[] = ["desktop", "mobile"],
-  groupBy: "month" | "week" | "day" = "month"
-): Promise<Omit<ChartData, "header" | "subheader">> {
-  const data: Array<{ label: string } & Record<string, number>> = []
-
-  const startDate = new Date()
-  startDate.setDate(
-    startDate.getDate() -
-      (groupBy === "week"
-        ? numPoints * 7
-        : groupBy === "day"
-          ? numPoints
-          : numPoints * 30) +
-      1
-  )
-
-  for (let i = 0; i < numPoints; i++) {
-    let label: string
-    if (groupBy === "month") {
-      label = new Date(
-        startDate.getFullYear(),
-        startDate.getMonth() + i,
-        1
-      ).toLocaleString("default", { month: "long" })
-    } else if (groupBy === "week") {
-      const weekStartDate = new Date(startDate)
-      weekStartDate.setDate(startDate.getDate() + i * 7)
-      label = `Week of ${weekStartDate.toLocaleDateString()}`
-    } else {
-      const dayDate = new Date(startDate)
-      dayDate.setDate(startDate.getDate() + i)
-      label = dayDate.toLocaleDateString()
-    }
-
-    const dataPoint: { label: string } & Record<string, number> = {
-      label,
-    } as { label: string } & Record<string, number>
-
-    dataKeys.forEach((key) => {
-      dataPoint[key] = Math.floor(Math.random() * 100)
-    })
-
-    data.push(dataPoint)
-  }
-
-  const colors = [
-    "#2563eb", // blue
-    "#4ade80", // green
-    "#fbbf24", // yellow
-    "#ef4444", // red
-    "#e11d48", // pink
-    "#ec4899", // purple
-    "#f59e0b", // orange
-    "#10b981", // emerald
-    "#06b6d4", // sky
-    "#3b82f6", // indigo
-    "#84cc16", // lime
-    "#f97316", // amber
-    "#eab308", // yellow
+export async function generateFakePhoneValidationData(
+  phoneNumber: string,
+  countryHint: string = "US"
+): Promise<PhoneValidationResponse> {
+  const isValid = Math.random() > 0.2 // 80% chance of being valid
+  const activityScore = Math.floor(Math.random() * 101) // Activity score between 0 and 100
+  const lineTypes = [
+    "Landline",
+    "Mobile",
+    "FixedVOIP",
+    "NonFixedVOIP",
+    "Premium",
+    "TollFree",
+    "Voicemail",
+    "Other",
   ]
+  const carrierNames = ["Carrier A", "Carrier B", "Carrier C", "Carrier D"]
 
-  const config: Record<string, { label: string; color: string }> = {}
-  dataKeys.forEach((key, index) => {
-    config[key] = {
-      label: key.charAt(0).toUpperCase() + key.slice(1),
-      color: colors[index % colors.length],
-    }
-  })
-
-  return {
-    data,
-    config,
+  const dataPoint: PhoneValidationResponse = {
+    id: `phone-1`,
+    phone_number: phoneNumber,
+    is_valid: isValid,
+    activity_score: activityScore,
+    country_calling_code: "+1",
+    country_code: countryHint,
+    country_name: "United States",
+    line_type: lineTypes[Math.floor(Math.random() * lineTypes.length)] as
+      | "Landline"
+      | "Mobile"
+      | "FixedVOIP"
+      | "NonFixedVOIP"
+      | "Premium"
+      | "TollFree"
+      | "Voicemail"
+      | "Other"
+      | null,
+    carrier: carrierNames[Math.floor(Math.random() * carrierNames.length)],
+    is_prepaid: Math.random() > 0.5,
+    error: undefined, // Changed from null to undefined
+    warnings: [],
   }
+
+  return dataPoint
 }
