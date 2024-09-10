@@ -55,7 +55,7 @@ export const registerHydraComponents = async (hydra: HydraClient) => {
     ),
     */
       "HydraQueryConstructor",
-      "Creating a query for scientific papers based on the user's query.",
+      "Based on a users query, ask 5 to 6 follow up questions to better understand the user's query. Make the questions the label. Use a mix of multi-select, inputs with suggestions, and  check boxes.",
       HydraQueryConstructor,
       {
         HydraQueryConstructor: zodToJsonSchema(HydraFormSchema),

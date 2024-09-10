@@ -77,6 +77,7 @@ export const HydraInputSchema = z.object({
   text: z.string(),
   inputType: z.enum(["text", "password", "email", "number"]),
   className: z.string().optional(),
+  suggestions: z.array(z.string()).optional(),
 })
 
 export const HydraRadioGroupSchema = z.object({
@@ -105,13 +106,10 @@ export const HydraSelectSchema = z.object({
   className: z.string().optional(),
 })
 
-export const HydraSliderSchema = z.object({
-  type: z.literal("slider"),
+export const HydraCheckboxSchema = z.object({
+  type: z.literal("checkbox"),
   id: z.string(),
   label: z.string(),
-  min: z.number().optional(),
-  max: z.number().optional(),
-  step: z.number().optional(),
   className: z.string().optional(),
 })
 
@@ -120,10 +118,9 @@ export const HydraFormSchema = z.object({
   fields: z.array(
     z.union([
       HydraInputSchema,
-      HydraTextareaSchema,
       HydraRadioGroupSchema,
       HydraSelectSchema,
-      HydraSliderSchema,
+      HydraCheckboxSchema,
     ])
   ),
   className: z.string().optional(),

@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
@@ -18,8 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import { Textarea } from "@/components/ui/textarea"
 
 export const HydraQueryConstructor: React.FC<HydraForm> = ({
   title,
@@ -38,6 +37,16 @@ export const HydraQueryConstructor: React.FC<HydraForm> = ({
     setFormData((prev) => ({ ...prev, [label]: value }))
   }
 
+  const addSuggestionToInput = (label: string, suggestion: string) => {
+    setFormData((prev) => {
+      const currentValue = prev[label] || ""
+      const newValue = currentValue
+        ? `${currentValue}, ${suggestion}`
+        : suggestion
+      return { ...prev, [label]: newValue }
+    })
+  }
+
   return (
     <Card className={className}>
       <CardHeader>{title && <CardTitle>{title}</CardTitle>}</CardHeader>
@@ -48,27 +57,36 @@ export const HydraQueryConstructor: React.FC<HydraForm> = ({
               {field.label}
             </label>
             {field.type === "input" ? (
-              <Input
+              <>
+                <Input
+                  id={field.id}
+                  type={field.inputType || "text"}
+                  value={formData[field.id] || field.text}
+                  onChange={(e) => handleInputChange(field.id, e.target.value)}
+                  className={field.className}
+                />
+                {field.suggestions && field.suggestions.length > 0 && (
+                  <div className="mt-2">
+                    {field.suggestions.map((suggestion, suggestionIndex) => (
+                      <Button
+                        key={suggestionIndex}
+                        onClick={() =>
+                          addSuggestionToInput(field.id, suggestion)
+                        }
+                        className="mr-2"
+                      >
+                        {suggestion}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : field.type === "checkbox" ? (
+              <Checkbox
                 id={field.id}
-                type={field.inputType || "text"}
-                value={formData[field.id] || field.text}
-                onChange={(e) => handleInputChange(field.id, e.target.value)}
-                className={field.className}
-              />
-            ) : field.type === "textarea" ? (
-              <Textarea
-                id={field.id}
-                value={formData[field.id] || field.text}
-                rows={field.rows}
-                onChange={(e) => handleInputChange(field.id, e.target.value)}
-                className={field.className}
-              />
-            ) : field.type === "slider" ? (
-              <Slider
-                id={field.id}
-                value={[Number(formData[field.id] || 0)]}
-                onValueChange={(value) =>
-                  handleInputChange(field.id, value[0].toString())
+                checked={formData[field.id] === "true"}
+                onCheckedChange={(checked) =>
+                  handleInputChange(field.id, checked.toString())
                 }
                 className={field.className}
               />
