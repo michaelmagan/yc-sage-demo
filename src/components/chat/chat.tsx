@@ -67,17 +67,22 @@ export function Chat({ messages, isLoading }: ChatProps) {
               }`}
             >
               <div
-                className={`${message.sender === "user" ? "ml-auto w-3/4" : "w-3/4"}`}
+                className={`max-w-[75%] ${
+                  message.sender === "user" ? "ml-auto" : ""
+                }`}
               >
                 <motion.div
                   initial={{ scale: shouldReduceMotion ? 1 : 0.9 }}
                   animate={{ scale: 1 }}
                   transition={{ duration: 0.3 }}
-                  className={
-                    message.sender === "user"
-                      ? "float-right inline-block rounded-lg bg-primary px-4 py-3 text-primary-foreground"
-                      : "inline-block rounded-lg bg-muted px-4 py-3"
-                  }
+                  className={`
+                    inline-block rounded-lg px-4 py-3
+                    ${
+                      message.sender === "user"
+                        ? "float-right bg-primary text-primary-foreground"
+                        : "float-left bg-muted"
+                    }
+                  `}
                 >
                   {message.message.split("\n").map((line, i, arr) => (
                     <React.Fragment key={i}>
@@ -89,7 +94,13 @@ export function Chat({ messages, isLoading }: ChatProps) {
               </div>
             </div>
             {message.component && (
-              <div className="mt-2 w-full">{message.component}</div>
+              <div
+                className={`mt-2 max-w-[75%] ${
+                  message.sender === "user" ? "ml-auto" : "ml-10"
+                }`}
+              >
+                {message.component}
+              </div>
             )}
           </motion.div>
         ))}
@@ -99,7 +110,7 @@ export function Chat({ messages, isLoading }: ChatProps) {
             {...getAnimationProps(messages.length)}
             className="flex items-start justify-start gap-3"
           >
-            <div className="w-fit">
+            <div className="max-w-[75%]">
               <motion.div
                 initial={{ scale: shouldReduceMotion ? 1 : 0.9 }}
                 animate={{ scale: 1 }}

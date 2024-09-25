@@ -26,36 +26,52 @@ export const HydraCard: React.FC<HydraCardProps> = ({
   className,
 }) => {
   return (
-    <Card className={className}>
-      <CardHeader>
-        {title && <CardTitle>{title}</CardTitle>}
-        {description && <CardDescription>{description}</CardDescription>}
+    <Card className={`${className} p-3 sm:p-6`}>
+      <CardHeader className="space-y-1 sm:space-y-3">
+        {title && (
+          <CardTitle className="text-base sm:text-xl">{title}</CardTitle>
+        )}
+        {description && (
+          <CardDescription className="text-xs sm:text-base">
+            {description}
+          </CardDescription>
+        )}
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-3 sm:space-y-4">
         {badges && badges.length > 0 && (
-          <div className="mb-4 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1 sm:gap-2">
             {badges.map((badge, index) => (
               <Badge
                 key={index}
                 variant="secondary"
-                className={`rounded-full px-2 py-1 text-xs font-semibold ${badge.className}`}
+                className={`text-2xs rounded-full px-1.5 py-0.5 font-semibold sm:px-2 sm:py-1 sm:text-xs ${badge.className}`}
               >
                 {badge.text}
               </Badge>
             ))}
           </div>
         )}
-        {header && <div className="mb-2 text-lg font-medium">{header}</div>}
-        <div>{content}</div>
+        {header && (
+          <div className="text-sm font-medium sm:text-lg">{header}</div>
+        )}
+        <div className="text-xs sm:text-base">{content}</div>
       </CardContent>
       {buttons && buttons.length > 0 && (
-        <div className="flex justify-end gap-2 p-4">
+        <div className="mt-3 flex flex-col justify-end gap-1 sm:mt-4 sm:flex-row sm:gap-2">
           {buttons.map((button, index) => (
-            <HydraButton key={index} {...button} className="w-full sm:w-auto" />
+            <HydraButton
+              key={index}
+              {...button}
+              className="w-full text-xs sm:w-auto sm:text-base"
+            />
           ))}
         </div>
       )}
-      {footer && <CardFooter>{footer}</CardFooter>}
+      {footer && (
+        <CardFooter className="mt-3 text-xs sm:mt-4 sm:text-base">
+          {footer}
+        </CardFooter>
+      )}
     </Card>
   )
 }
