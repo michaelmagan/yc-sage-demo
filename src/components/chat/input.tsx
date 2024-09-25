@@ -8,6 +8,7 @@ import {
   AutosizeTextAreaRef,
 } from "@/components/ui/auto-resize-textarea"
 import { Button } from "@/components/ui/button"
+import { SpeechToText } from "@/components/chat/speech"
 
 interface ChatInputState {
   message: string
@@ -15,6 +16,8 @@ interface ChatInputState {
   setMessage: (message: string) => void
   clearMessage: () => void
   setInputRef: (ref: React.RefObject<AutosizeTextAreaRef>) => void
+  shouldResetSpeech: boolean
+  setShouldResetSpeech: (value: boolean) => void
 }
 
 export const useChatInputStore = create<ChatInputState>((set) => ({
@@ -24,6 +27,8 @@ export const useChatInputStore = create<ChatInputState>((set) => ({
   clearMessage: () => set({ message: "" }),
   setInputRef: (ref: React.RefObject<AutosizeTextAreaRef>) =>
     set({ inputRef: ref }),
+  shouldResetSpeech: false,
+  setShouldResetSpeech: (value: boolean) => set({ shouldResetSpeech: value }),
 }))
 
 interface ChatInputProps {
@@ -33,7 +38,8 @@ interface ChatInputProps {
 export function ChatInput({ onSendMessage }: ChatInputProps) {
   const [currMaxHeight, setCurrMaxHeight] = useState(0)
   const textareaRef = useRef<AutosizeTextAreaRef>(null)
-  const { message, setMessage, setInputRef } = useChatInputStore()
+  const { message, setMessage, setInputRef, setShouldResetSpeech } =
+    useChatInputStore()
 
   useEffect(() => {
     setInputRef(textareaRef)
@@ -48,6 +54,7 @@ export function ChatInput({ onSendMessage }: ChatInputProps) {
   const handleSendMessage = () => {
     setMessage("")
     onSendMessage(message)
+    setShouldResetSpeech(true)
   }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -71,6 +78,7 @@ export function ChatInput({ onSendMessage }: ChatInputProps) {
           onKeyDown={handleKeyDown}
           className="flex-grow resize-none px-3 py-1"
         />
+        <SpeechToText />
         <Button onClick={handleSendMessage} className="h-14">
           Send
         </Button>
