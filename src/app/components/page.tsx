@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react"
 import {
   HydraBadge as HydraBadgeType,
@@ -5,10 +7,12 @@ import {
   HydraCard as HydraCardType,
   HydraCarousel as HydraCarouselType,
 } from "@/model/hydra"
+import { groupBy } from "@/yc.service"
 
 import { HydraButton } from "@/components/hydra/button"
 import { HydraCard } from "@/components/hydra/card"
 import { HydraCarousel } from "@/components/hydra/carousel"
+import Chart from "@/components/hydra/chart"
 
 // Sample data for demonstration
 const sampleCards: HydraCardType[] = [
@@ -73,6 +77,19 @@ const HomePage: React.FC = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="mb-6 text-3xl font-bold">Hydra Components Demo</h1>
+
+      <section className="mb-8">
+        <h2 className="mb-4 text-2xl font-semibold">Grouped Data</h2>
+        <Chart
+          type="line"
+          select={["batch", "COUNT(*) as count"]}
+          groupBy={["batch"]}
+          orderBy={{ batch: "ASC" }}
+          limit={10}
+          dataKey="count"
+          nameKey="batch"
+        />
+      </section>
 
       <section className="mb-8">
         <h2 className="mb-4 text-2xl font-semibold">Individual Card</h2>

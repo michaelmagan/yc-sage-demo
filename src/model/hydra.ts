@@ -70,6 +70,63 @@ export const HydraTextSchema = z.object({
   share: z.array(HydraShareSchema).optional(),
 })
 
+export const HydraChartSchema = z.object({
+  type: z
+    .enum(["line", "bar"])
+    .describe("The type of chart to display. Example: 'line'"),
+  select: z
+    .array(z.string())
+    .describe(
+      "Array of columns to select from the database. Example: ['batch', 'COUNT(*) as count']"
+    ),
+  groupBy: z
+    .array(
+      z.enum([
+        "batch",
+        "type",
+        "founded",
+        "location",
+        "team_size",
+        "founder_count",
+      ])
+    )
+    .describe("Array of columns to group by. Example: ['batch']"),
+  where: z
+    .record(z.union([z.string(), z.number(), z.boolean()]))
+    .optional()
+    .describe(
+      "Object specifying conditions for filtering data. Example: { type: 'B2B', founded: 2020 }"
+    ),
+  orderBy: z
+    .record(z.enum(["ASC", "DESC"]))
+    .optional()
+    .describe(
+      "Object specifying the order of results. Example: { batch: 'ASC' }"
+    ),
+  limit: z
+    .number()
+    .optional()
+    .describe("Number of results to return. Example: 10"),
+  dataKey: z
+    .string()
+    .describe(
+      "The key in the data object to use for the y-axis values. Example: 'count'"
+    ),
+  nameKey: z
+    .string()
+    .optional()
+    .describe(
+      "The key in the data object to use for x-axis labels. Example: 'batch'"
+    ),
+  colors: z
+    .array(z.string())
+    .optional()
+    .describe(
+      "Array of colors to use for the chart. Example: ['#8884d8', '#82ca9d']"
+    ),
+})
+
+export type HydraChart = z.infer<typeof HydraChartSchema>
 export type HydraTextInput = z.infer<typeof HydraTextInputSchema>
 export type HydraTextarea = z.infer<typeof HydraTextareaSchema>
 export type HydraTextSchemaProps = z.infer<typeof HydraTextSchema>

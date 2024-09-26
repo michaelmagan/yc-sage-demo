@@ -8,3 +8,6 @@ pinecone
 openai
 tiktoken
 tenacity
+sqlalchemy
+psycopg2-binary
+python-dotenv

@@ -1,9 +1,14 @@
-import { HydraCarouselSchema, HydraTextSchema } from "@/model/hydra"
+import {
+  HydraCarouselSchema,
+  HydraChartSchema,
+  HydraTextSchema,
+} from "@/model/hydra"
 import { queryPineconeForDocuments } from "@/yc.service"
 import { HydraClient } from "hydra-ai"
 import { zodToJsonSchema } from "zod-to-json-schema"
 
 import { HydraCarousel } from "@/components/hydra/carousel"
+import Chart from "@/components/hydra/chart"
 import { HydraText } from "@/components/hydra/text"
 
 export const getHydraClient = (): HydraClient => {
@@ -45,6 +50,14 @@ export const registerHydraComponents = async (hydra: HydraClient) => {
       HydraText,
       {
         HydraText: zodToJsonSchema(HydraTextSchema),
+      }
+    ),
+    hydra.registerComponent(
+      "Chart",
+      "A chart component for visualizing data. It supports both line and bar charts, and can be used to display various types of data trends and comparisons.",
+      Chart,
+      {
+        Chart: zodToJsonSchema(HydraChartSchema),
       }
     ),
   ])
