@@ -6,11 +6,9 @@ export const Header: FunctionComponent = () => {
     <header className="fixed left-0 right-0 top-0 z-10 mx-4 my-4 space-y-4 bg-background">
       <div className="mx-auto flex max-w-7xl items-center justify-between">
         <div className="flex flex-col">
-          <h1 className="text-lg font-bold sm:text-2xl">
-            Yage: A YC Clone of Sage
-          </h1>
-          <p className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
-            Chat with 4500+ YC Companies Data
+          <h1 className="text-lg font-bold sm:text-2xl">Yage</h1>
+          <p className="text-xs text-gray-800 dark:text-gray-400 sm:text-lg">
+            Chat with 4500+ YC companies
           </p>
         </div>
         <a
