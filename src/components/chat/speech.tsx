@@ -1,6 +1,8 @@
+"use client"
+
 import "regenerator-runtime/runtime"
 
-import React, { useCallback, useEffect, useState } from "react"
+import React, { Suspense, useCallback, useEffect, useState } from "react"
 import { Mic, MicOff } from "lucide-react"
 import SpeechRecognition, {
   useSpeechRecognition,
@@ -10,7 +12,7 @@ import { Button } from "@/components/ui/button"
 
 import { useChatInputStore } from "./input"
 
-export const SpeechToText: React.FC = () => {
+const SpeechToTextContent: React.FC = () => {
   const [isListening, setIsListening] = useState(false)
   const [microphoneAccess, setMicrophoneAccess] = useState<boolean | null>(null)
   const { setMessage, shouldResetSpeech, setShouldResetSpeech } =
@@ -18,10 +20,23 @@ export const SpeechToText: React.FC = () => {
   const { transcript, browserSupportsSpeechRecognition, resetTranscript } =
     useSpeechRecognition()
 
-  useEffect(() => {
-    // Check microphone access on component mount
-    checkMicrophoneAccess()
+  const checkMicrophoneAccess = useCallback(async () => {
+    if (typeof navigator !== "undefined" && navigator.mediaDevices) {
+      try {
+        await navigator.mediaDevices.getUserMedia({ audio: true })
+        setMicrophoneAccess(true)
+      } catch (err) {
+        console.error("Error accessing microphone:", err)
+        setMicrophoneAccess(false)
+      }
+    } else {
+      setMicrophoneAccess(false)
+    }
   }, [])
+
+  useEffect(() => {
+    checkMicrophoneAccess()
+  }, [checkMicrophoneAccess])
 
   useEffect(() => {
     if (isListening) {
@@ -48,18 +63,16 @@ export const SpeechToText: React.FC = () => {
     }
   }, [shouldResetSpeech, resetSpeechState])
 
-  const checkMicrophoneAccess = async () => {
-    try {
-      await navigator.mediaDevices.getUserMedia({ audio: true })
-      setMicrophoneAccess(true)
-    } catch (err) {
-      console.error("Error accessing microphone:", err)
-      setMicrophoneAccess(false)
-    }
+  if (typeof window === "undefined") {
+    return null // Return null on the server side
   }
 
   if (!browserSupportsSpeechRecognition) {
     return <div>Browser doesn&apos;t support speech recognition.</div>
+  }
+
+  if (microphoneAccess === null) {
+    return <div>Checking microphone access...</div>
   }
 
   if (microphoneAccess === false) {
@@ -86,6 +99,14 @@ export const SpeechToText: React.FC = () => {
         {isListening ? <MicOff /> : <Mic />}
       </Button>
     </div>
+  )
+}
+
+export const SpeechToText: React.FC = () => {
+  return (
+    <React.Suspense fallback={<div>Loading speech recognition...</div>}>
+      <SpeechToTextContent />
+    </React.Suspense>
   )
 }
 

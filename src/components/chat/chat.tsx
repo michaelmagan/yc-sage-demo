@@ -67,7 +67,7 @@ export function Chat({ messages, isLoading }: ChatProps) {
               }`}
             >
               <div
-                className={`max-w-[75%] ${
+                className={`max-w-[85%] sm:max-w-[75%] ${
                   message.sender === "user" ? "ml-auto" : ""
                 }`}
               >
@@ -95,8 +95,8 @@ export function Chat({ messages, isLoading }: ChatProps) {
             </div>
             {message.component && (
               <div
-                className={`mt-2 max-w-[75%] ${
-                  message.sender === "user" ? "ml-auto" : "ml-10"
+                className={`mt-2 max-w-[85%] sm:max-w-[75%] ${
+                  message.sender === "user" ? "ml-auto" : "ml-10 mr-10"
                 }`}
               >
                 {message.component}
@@ -110,7 +110,7 @@ export function Chat({ messages, isLoading }: ChatProps) {
             {...getAnimationProps(messages.length)}
             className="flex items-start justify-start gap-3"
           >
-            <div className="max-w-[75%]">
+            <div className="max-w-[85%] sm:max-w-[75%]">
               <motion.div
                 initial={{ scale: shouldReduceMotion ? 1 : 0.9 }}
                 animate={{ scale: 1 }}
