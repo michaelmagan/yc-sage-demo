@@ -33,6 +33,7 @@ export default function ChatBox() {
   const [isLoading, setIsLoading] = useState(false)
   const [isHydraReady, setIsHydraReady] = useState(false)
   const [isRegistering, setIsRegistering] = useState(false)
+  const [profile, setProfile] = useState<Record<string, string>>({})
 
   const hydra = useMemo(() => getHydraClient(), [])
 
@@ -46,6 +47,14 @@ export default function ChatBox() {
     }
   }, [hydra, isHydraReady, isRegistering])
 
+  useEffect(() => {
+    // Load profile data from localStorage
+    const storedProfile = localStorage.getItem("userProfile")
+    if (storedProfile) {
+      setProfile(JSON.parse(storedProfile))
+    }
+  }, [])
+
   const handleSendMessage = (message: string) => {
     if (message.trim()) {
       addMessage({
@@ -54,7 +63,12 @@ export default function ChatBox() {
       })
     }
 
-    fetchResponse(message.trim())
+    const profileInfo = Object.entries(profile)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join("\n")
+    const enhancedMessage = `User Profile:\n${profileInfo}\n\nUser Message: ${message.trim()}`
+
+    fetchResponse(enhancedMessage)
   }
 
   const fetchResponse = async (message: string) => {

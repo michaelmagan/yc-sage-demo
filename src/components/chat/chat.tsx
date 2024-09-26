@@ -1,9 +1,12 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from "react"
+import { getSuggestions } from "@/suggestions"
 import { motion, useReducedMotion } from "framer-motion"
+import { ChatCompletionMessageParam } from "openai/resources/chat/completions"
 
 import { Dots } from "@/components/ui/dots"
+import { useSuggestionStore } from "@/components/chat/suggestion-bar"
 
 import { ChatMessage } from "./box"
 
@@ -15,6 +18,7 @@ interface ChatProps {
 export function Chat({ messages, isLoading }: ChatProps) {
   const shouldReduceMotion = useReducedMotion()
   const [visibleMessages, setVisibleMessages] = useState<number>(0)
+  const { setRandomSuggestions, setIsLoading } = useSuggestionStore()
 
   useEffect(() => {
     const showAllMessages = () => {
@@ -23,6 +27,26 @@ export function Chat({ messages, isLoading }: ChatProps) {
 
     showAllMessages()
   }, [messages.length])
+
+  useEffect(() => {
+    const updateSuggestions = async () => {
+      if (messages.length > 0 && messages[messages.length - 1].component) {
+        setIsLoading(true)
+        const messageHistory: ChatCompletionMessageParam[] = messages.map(
+          (msg) => ({
+            role: msg.sender === "user" ? "user" : "assistant",
+            content: msg.message,
+          })
+        )
+        const newSuggestions = await getSuggestions(messageHistory)
+
+        setRandomSuggestions(newSuggestions)
+        setIsLoading(false)
+      }
+    }
+
+    updateSuggestions()
+  }, [messages, setRandomSuggestions, setIsLoading])
 
   const getAnimationProps = (index: number) => {
     if (shouldReduceMotion) {

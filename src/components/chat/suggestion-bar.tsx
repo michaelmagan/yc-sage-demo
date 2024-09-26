@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
+import { create } from "zustand"
 
 import { Button } from "@/components/ui/button"
 import { useChatInputStore } from "@/components/chat/input"
@@ -8,12 +9,16 @@ interface Suggestion {
   query: string
 }
 
-export function SuggestionBar() {
-  const { setMessage, inputRef } = useChatInputStore()
-  const [randomSuggestions, setRandomSuggestions] = useState<Suggestion[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  // Suggestions for getting YC companies based on semantic data
-  const allSuggestions: Suggestion[] = [
+interface SuggestionStore {
+  suggestions: Suggestion[]
+  randomSuggestions: Suggestion[]
+  isLoading: boolean
+  setRandomSuggestions: (suggestions: Suggestion[]) => void
+  setIsLoading: (isLoading: boolean) => void
+}
+
+export const useSuggestionStore = create<SuggestionStore>((set) => ({
+  suggestions: [
     {
       title: "Find AI startups",
       query: "Show me YC companies working on artificial intelligence.",
@@ -23,30 +28,40 @@ export function SuggestionBar() {
       query: "List YC startups in the financial technology sector.",
     },
     {
-      title: "Explore healthcare",
-      query: "What YC companies are innovating in healthcare?",
+      title: "Companies per batch",
+      query: "Show the count of companies per batch.",
     },
     {
-      title: "Recent YC batches",
-      query: "Show me startups from the most recent YC batch.",
+      title: "Average number of founders per type",
+      query: "Show the average number of founders per type",
     },
-    {
-      title: "Successful exits",
-      query: "Which YC companies have had successful exits or IPOs?",
-    },
-  ]
+  ],
+  randomSuggestions: [],
+  isLoading: true,
+  setRandomSuggestions: (randomSuggestions) => set({ randomSuggestions }),
+  setIsLoading: (isLoading) => set({ isLoading }),
+}))
+
+export function SuggestionBar() {
+  const { setMessage, inputRef } = useChatInputStore()
+  const {
+    suggestions,
+    randomSuggestions,
+    isLoading,
+    setRandomSuggestions,
+    setIsLoading,
+  } = useSuggestionStore()
 
   useEffect(() => {
     const getRandomSuggestions = () => {
-      const shuffled = [...allSuggestions].sort(() => 0.5 - Math.random())
+      const shuffled = [...suggestions].sort(() => 0.5 - Math.random())
       return shuffled.slice(0, 4)
     }
 
     setIsLoading(true)
     setRandomSuggestions(getRandomSuggestions())
     setIsLoading(false)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [suggestions, setRandomSuggestions, setIsLoading])
 
   const handleSuggestionClick = (suggestion: string) => {
     setMessage(suggestion)

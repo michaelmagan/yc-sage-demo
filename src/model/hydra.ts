@@ -126,6 +126,23 @@ export const HydraChartSchema = z.object({
     ),
 })
 
+export const ProfileFieldSchema = z.object({
+  id: z.string(),
+  label: z.string(),
+  type: z.enum(["input", "textarea"]),
+  inputType: z.string().optional(),
+  rows: z.number().optional(),
+  className: z.string().optional(),
+  value: z.string().optional(),
+})
+
+export const ProfilePropsSchema = z.object({
+  title: z.string(),
+  fields: z.array(ProfileFieldSchema),
+  className: z.string().optional(),
+})
+
+export type Profile = z.infer<typeof ProfilePropsSchema>
 export type HydraChart = z.infer<typeof HydraChartSchema>
 export type HydraTextInput = z.infer<typeof HydraTextInputSchema>
 export type HydraTextarea = z.infer<typeof HydraTextareaSchema>
