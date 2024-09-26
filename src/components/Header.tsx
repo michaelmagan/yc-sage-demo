@@ -1,6 +1,5 @@
 import { FunctionComponent } from "react"
-
-import { Header as HeaderClient } from "./Header-Client"
+import { FaGithub } from "react-icons/fa"
 
 export const Header: FunctionComponent = () => {
   return (
@@ -14,7 +13,14 @@ export const Header: FunctionComponent = () => {
             Chat with 4500+ YC Companies Data
           </p>
         </div>
-        <HeaderClient />
+        <a
+          href="https://github.com/michaelmagan/yc-sage-demo"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-600 dark:text-gray-400"
+        >
+          <FaGithub size={24} />
+        </a>
       </div>
     </header>
   )
