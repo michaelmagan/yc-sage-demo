@@ -4,6 +4,8 @@ import { ReactElement, Suspense, useEffect, useMemo, useState } from "react"
 import { getHydraClient, registerHydraComponents } from "@/hydra-client"
 import { create } from "zustand"
 
+import { JoinDiscordModal, TweetAboutUsModal } from "@/components/modals"
+
 import { ScrollArea } from "../ui/scroll-area"
 import { Chat } from "./chat"
 import { ChatInput } from "./input"
@@ -34,6 +36,8 @@ export default function ChatBox() {
   const [isHydraReady, setIsHydraReady] = useState(false)
   const [isRegistering, setIsRegistering] = useState(false)
   const [profile, setProfile] = useState<Record<string, string>>({})
+  const [showDiscordModal, setShowDiscordModal] = useState(false)
+  const [showTweetModal, setShowTweetModal] = useState(false)
 
   const hydra = useMemo(() => getHydraClient(), [])
 
@@ -54,6 +58,17 @@ export default function ChatBox() {
       setProfile(JSON.parse(storedProfile))
     }
   }, [])
+
+  useEffect(() => {
+    const userMessageCount = messages.filter(
+      (msg) => msg.sender === "user"
+    ).length
+    if (userMessageCount === 3) {
+      setShowDiscordModal(true)
+    } else if (userMessageCount === 6) {
+      setShowTweetModal(true)
+    }
+  }, [messages])
 
   const handleSendMessage = (message: string) => {
     if (message.trim()) {
@@ -118,6 +133,8 @@ export default function ChatBox() {
       </Suspense>
       <SuggestionBar />
       <ChatInput onSendMessage={handleSendMessage} />
+      {showDiscordModal && <JoinDiscordModal />}
+      {showTweetModal && <TweetAboutUsModal />}
     </>
   )
 }
