@@ -26,7 +26,7 @@ export const HydraCard: React.FC<HydraCardProps> = ({
   className,
 }) => {
   return (
-    <Card className={`${className} p-3 sm:p-6`}>
+    <Card className={`${className} p-2 sm:p-6`}>
       <CardHeader className="space-y-1 sm:space-y-3">
         {title && (
           <CardTitle className="text-base sm:text-xl">{title}</CardTitle>
@@ -37,7 +37,7 @@ export const HydraCard: React.FC<HydraCardProps> = ({
           </CardDescription>
         )}
       </CardHeader>
-      <CardContent className="space-y-3 sm:space-y-4">
+      <CardContent className="space-y-2 sm:space-y-4">
         {badges && badges.length > 0 && (
           <div className="flex flex-wrap gap-1 sm:gap-2">
             {badges.map((badge, index) => (
@@ -57,7 +57,7 @@ export const HydraCard: React.FC<HydraCardProps> = ({
         <div className="text-xs sm:text-base">{content}</div>
       </CardContent>
       {buttons && buttons.length > 0 && (
-        <div className="mt-3 flex flex-col justify-end gap-1 sm:mt-4 sm:flex-row sm:gap-2">
+        <div className="mt-2 flex flex-col justify-end gap-1 sm:mt-4 sm:flex-row sm:gap-2">
           {buttons.map((button, index) => (
             <HydraButton
               key={index}
@@ -68,7 +68,7 @@ export const HydraCard: React.FC<HydraCardProps> = ({
         </div>
       )}
       {footer && (
-        <CardFooter className="mt-3 text-xs sm:mt-4 sm:text-base">
+        <CardFooter className="mt-2 text-xs sm:mt-4 sm:text-base">
           {footer}
         </CardFooter>
       )}
