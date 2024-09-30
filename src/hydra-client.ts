@@ -15,7 +15,7 @@ import { HydraText } from "@/components/hydra/text"
 
 export const getHydraClient = (): HydraClient => {
   const hydra = new HydraClient({
-    hydraApiKey: process.env.HYDRAAI_API_KEY,
+    hydraApiKey: process.env.NEXT_PUBLIC_HYDRAAI_API_KEY,
   })
   return hydra
 }
