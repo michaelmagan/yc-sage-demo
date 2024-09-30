@@ -28,11 +28,12 @@ For more information, visit the [Hydra AI GitHub repository](https://github.com/
    pip install -r requirements.txt
    ```
 4. Run the cells in the Pinecone Jupyter Notebook (`pinecone.ipynb`) to initialize and interact with the Pinecone service.
-5. Install the required Node.js packages by running the following command:
+5. Run the cells in the Postgres Jupyter Notebook (`postgress.ipynb`) to set up and interact with the Postgres database.
+6. Install the required Node.js packages by running the following command:
    ```
    npm install
    ```
-6. Start the development server with the following command:
+7. Start the development server with the following command:
    ```
    npm run dev
    ```
