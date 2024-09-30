@@ -14,7 +14,9 @@ import Chart from "@/components/hydra/chart"
 import { HydraText } from "@/components/hydra/text"
 
 export const getHydraClient = (): HydraClient => {
-  const hydra = new HydraClient()
+  const hydra = new HydraClient({
+    hydraApiKey: process.env.HYDRAAI_API_KEY,
+  })
   return hydra
 }
 
