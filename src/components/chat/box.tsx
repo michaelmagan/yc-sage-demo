@@ -101,6 +101,11 @@ export default function ChatBox() {
           message: response.message,
           component: response.component,
         })
+      } else if (typeof response === "object" && response.message) {
+        addMessage({
+          sender: "bot",
+          message: response.message,
+        })
       } else if (typeof response === "string") {
         addMessage({
           sender: "bot",
