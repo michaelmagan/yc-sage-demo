@@ -76,10 +76,10 @@ export function ChatInput({ onSendMessage }: ChatInputProps) {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-grow resize-none px-3 py-1"
+          className="flex-grow resize-none px-3 py-1 md:py-2"
         />
         <SpeechToText />
-        <Button onClick={handleSendMessage} className="h-14">
+        <Button onClick={handleSendMessage} className="h-10 md:h-14">
           Send
         </Button>
       </div>
