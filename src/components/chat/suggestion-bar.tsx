@@ -14,8 +14,30 @@ interface SuggestionStore {
   suggestions: Suggestion[]
   randomSuggestions: Suggestion[]
   isLoading: boolean
-  setRandomSuggestions: (suggestions: Suggestion[]) => void
+  setRandomSuggestions: () => void
   setIsLoading: (isLoading: boolean) => void
+}
+
+const getRandomSuggestions = () => {
+  const suggestions = [
+    {
+      title: "Find AI startups",
+      query: "Show me YC companies working on artificial intelligence.",
+    },
+    {
+      title: "Discover fintech",
+      query: "List YC startups in the financial technology sector.",
+    },
+    {
+      title: "Companies per batch",
+      query: "Show the count of companies per batch.",
+    },
+    {
+      title: "Average number of founders per type",
+      query: "Show the average number of founders per type",
+    },
+  ]
+  return suggestions.sort(() => 0.5 - Math.random()).slice(0, 4)
 }
 
 export const useSuggestionStore = create<SuggestionStore>((set) => ({
@@ -39,31 +61,22 @@ export const useSuggestionStore = create<SuggestionStore>((set) => ({
   ],
   randomSuggestions: [],
   isLoading: true,
-  setRandomSuggestions: (randomSuggestions) => set({ randomSuggestions }),
+  setRandomSuggestions: () =>
+    set({ randomSuggestions: getRandomSuggestions() }),
   setIsLoading: (isLoading) => set({ isLoading }),
 }))
 
 export function SuggestionBar() {
   const { setMessage, inputRef } = useChatInputStore()
-  const {
-    suggestions,
-    randomSuggestions,
-    isLoading,
-    setRandomSuggestions,
-    setIsLoading,
-  } = useSuggestionStore()
+  const { randomSuggestions, isLoading, setRandomSuggestions, setIsLoading } =
+    useSuggestionStore()
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    const getRandomSuggestions = () => {
-      const shuffled = [...suggestions].sort(() => 0.5 - Math.random())
-      return shuffled.slice(0, 4)
-    }
-
     setIsLoading(true)
-    setRandomSuggestions(getRandomSuggestions())
+    setRandomSuggestions()
     setIsLoading(false)
-  }, [suggestions, setRandomSuggestions, setIsLoading])
+  }, [setRandomSuggestions, setIsLoading])
 
   useEffect(() => {
     const handleResize = () => {

@@ -1,21 +1,19 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from "react"
-import { getSuggestions } from "@/suggestions"
 import { motion, useReducedMotion } from "framer-motion"
 import { ChatCompletionMessageParam } from "openai/resources/chat/completions"
 
-import { Dots } from "@/components/ui/dots"
+import { ChatMessage } from "@/types/chat"
 import { useSuggestionStore } from "@/components/chat/suggestion-bar"
-
-import { ChatMessage } from "./box"
 
 interface ChatProps {
   messages: ChatMessage[]
   isLoading: boolean
+  resultMessage?: string
 }
 
-export function Chat({ messages, isLoading }: ChatProps) {
+export function Chat({ messages, isLoading, resultMessage }: ChatProps) {
   const shouldReduceMotion = useReducedMotion()
   const [visibleMessages, setVisibleMessages] = useState<number>(0)
   const { setRandomSuggestions, setIsLoading } = useSuggestionStore()
@@ -30,18 +28,18 @@ export function Chat({ messages, isLoading }: ChatProps) {
 
   useEffect(() => {
     const updateSuggestions = async () => {
-      if (messages.length > 0 && messages[messages.length - 1].component) {
-        setIsLoading(true)
+      if (messages.length > 0) {
         const messageHistory: ChatCompletionMessageParam[] = messages.map(
           (msg) => ({
             role: msg.sender === "user" ? "user" : "assistant",
             content: msg.message,
           })
         )
-        const newSuggestions = await getSuggestions(messageHistory)
-
-        setRandomSuggestions(newSuggestions)
-        setIsLoading(false)
+        setIsLoading(true)
+        setTimeout(() => {
+          setRandomSuggestions()
+          setIsLoading(false)
+        }, 1000)
       }
     }
 
@@ -141,7 +139,28 @@ export function Chat({ messages, isLoading }: ChatProps) {
                 transition={{ duration: 0.3 }}
                 className="flex min-h-[40px] items-center justify-center rounded-lg bg-muted px-4 py-3"
               >
-                <Dots />
+                {resultMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{
+                      opacity: [0, 1, 0],
+                      y: 0,
+                    }}
+                    transition={{
+                      opacity: {
+                        duration: 2.5,
+                        repeat: Infinity,
+                        ease: "linear",
+                      },
+                      y: {
+                        duration: 0.4,
+                      },
+                    }}
+                    className="text-sm text-muted-foreground"
+                  >
+                    {resultMessage}
+                  </motion.div>
+                )}
               </motion.div>
             </div>
           </motion.div>

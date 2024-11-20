@@ -1,27 +1,17 @@
 "use client"
 
-import { ReactElement, Suspense, useEffect, useMemo, useState } from "react"
+import { Suspense, useEffect, useMemo, useState } from "react"
 import { getHydraClient, registerHydraComponents } from "@/hydra-client"
 import { create } from "zustand"
 
+import { ChatState } from "@/types/chat"
+import { GenerateComponentResponse } from "@/types/generate-component"
 import { JoinDiscordModal, TweetAboutUsModal } from "@/components/modals"
 
 import { ScrollArea } from "../ui/scroll-area"
 import { Chat } from "./chat"
 import { ChatInput } from "./input"
 import { SuggestionBar } from "./suggestion-bar"
-
-export interface ChatMessage {
-  sender: "bot" | "user"
-  message: string
-  component?: ReactElement
-}
-
-interface ChatState {
-  messages: ChatMessage[]
-  addMessage: (message: ChatMessage) => void
-  clearMessages: () => void
-}
 
 export const useChatStore = create<ChatState>((set) => ({
   messages: [],
@@ -38,6 +28,7 @@ export default function ChatBox() {
   const [profile, setProfile] = useState<Record<string, string>>({})
   const [showDiscordModal, setShowDiscordModal] = useState(false)
   const [showTweetModal, setShowTweetModal] = useState(false)
+  const [resultText, setResultText] = useState<string | undefined>()
 
   const hydra = useMemo(() => getHydraClient(), [])
 
@@ -86,10 +77,19 @@ export default function ChatBox() {
     fetchResponse(enhancedMessage)
   }
 
+  const handleProgressUpdate = (progress: GenerateComponentResponse) => {
+    if (progress.message) {
+      setResultText(progress.message)
+    }
+  }
+
   const fetchResponse = async (message: string) => {
     setIsLoading(true)
     try {
-      const response = await hydra.generateComponent(message)
+      const response = await hydra.generateComponent(
+        message,
+        handleProgressUpdate
+      )
       console.log("Hydra client result:", response) // Added console log
       if (
         typeof response === "object" &&
@@ -133,7 +133,11 @@ export default function ChatBox() {
     <>
       <Suspense fallback={<div>Loading...</div>}>
         <ScrollArea className="mt-[6rem] h-[calc(100vh-4rem)] w-full">
-          <Chat messages={messages} isLoading={isLoading} />
+          <Chat
+            messages={messages}
+            isLoading={isLoading}
+            resultMessage={resultText}
+          />
         </ScrollArea>
       </Suspense>
       <SuggestionBar />

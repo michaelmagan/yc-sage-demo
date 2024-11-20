@@ -1,14 +1,19 @@
 import type { Metadata } from "next"
+import dynamic from "next/dynamic"
 import { Inter } from "next/font/google"
 
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
 import { Header } from "@/components/Header"
-import { ThemeProvider } from "@/components/theme-provider"
 
 import "@/styles/globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
+
+const ThemeProvider = dynamic(
+  () => import("@/components/theme-provider").then((mod) => mod.ThemeProvider),
+  { ssr: false }
+)
 
 export const metadata: Metadata = {
   title: "YC Archive Explorer - AI-Powered YC Startup Insights",

@@ -20,6 +20,7 @@ export const getHydraClient = (): HydraClient => {
   return hydra
 }
 
+// Tool definition for retrieving YC company data from Pinecone vector database
 const getYCDataTool = {
   getComponentContext: queryPineconeForDocuments,
   definition: {
@@ -38,39 +39,50 @@ const getYCDataTool = {
 }
 
 export const registerHydraComponents = async (hydra: HydraClient) => {
-  await Promise.all([
-    hydra.registerComponent(
-      "HydraCarousel",
-      "A carousel of cards component for displaying multiple YC companies that match a given query. Each card represents a company and should include as many relevant links as possible, represented as buttons. These links should be derived from the content and context of each company card, providing comprehensive navigation options for users. Ensure that every potential action or related information about the company has a corresponding button link.",
-      HydraCarousel,
-      {
-        HydraCarousel: zodToJsonSchema(HydraCarouselSchema),
-      },
-      [getYCDataTool]
-    ),
-    hydra.registerComponent(
-      "HydraText",
-      "A text component for creating and generating text content. Generate text based on the context and the user's query. Each field should have a unique 'id' that corresponds to the data it represents. The 'share' property allows defining multiple sharing options, each with a custom URL template. In the URL template, use {fieldId} placeholders to insert field values when sharing.",
-      HydraText,
-      {
-        HydraText: zodToJsonSchema(HydraTextSchema),
-      }
-    ),
-    hydra.registerComponent(
-      "Chart",
-      "A chart component for visualizing quantitative data. It supports both line and bar charts, and should only be used when users specifically request counts, averages, or other numerical data that are clearly suited for graphical representation. This component is ideal for displaying trends, comparisons, and distributions of numerical data.",
-      Chart,
-      {
-        Chart: zodToJsonSchema(HydraChartSchema),
-      }
-    ),
-    hydra.registerComponent(
-      "ProfileForm",
-      "A form component to save information on the user. It allows users to input and store personal data, which can be retrieved and used in other parts of the application.",
-      ProfileForm,
-      {
-        ProfileForm: zodToJsonSchema(ProfilePropsSchema),
-      }
-    ),
-  ])
+  try {
+    await Promise.all([
+      // Register HydraCarousel component - Used to display YC company cards in a carousel format
+      // The component can fetch relevant company data using the getYCDataTool
+      hydra.registerComponent({
+        name: "HydraCarousel",
+        description:
+          "A carousel of cards component for displaying multiple YC companies that match a given query...",
+        component: HydraCarousel,
+        propsDefinition: {
+          HydraCarousel: zodToJsonSchema(HydraCarouselSchema),
+        },
+        contextTools: [getYCDataTool], // Allows the component to fetch YC data
+      }),
+
+      // Register HydraText component - Used for generating and formatting text content
+      // This component can create structured text with sharing capabilities
+      hydra.registerComponent({
+        name: "HydraText",
+        description:
+          "A text component for creating and generating text content...",
+        component: HydraText,
+        propsDefinition: { HydraText: zodToJsonSchema(HydraTextSchema) },
+      }),
+
+      // Register Chart component - Used for data visualization
+      // This component creates charts when numerical data analysis is requested
+      hydra.registerComponent({
+        name: "Chart",
+        description: "A chart component for visualizing quantitative data...",
+        component: Chart,
+        propsDefinition: { Chart: zodToJsonSchema(HydraChartSchema) },
+      }),
+
+      // Register ProfileForm component - Used to collect and store user information
+      // This component manages user profile data that can be used to personalize responses
+      hydra.registerComponent({
+        name: "ProfileForm",
+        description: "A form component to save information on the user...",
+        component: ProfileForm,
+        propsDefinition: { ProfileForm: zodToJsonSchema(ProfilePropsSchema) },
+      }),
+    ])
+  } catch (error) {
+    console.error("Error registering components:", error)
+  }
 }
